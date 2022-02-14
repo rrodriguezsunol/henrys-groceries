@@ -1,4 +1,4 @@
-package uk.co.redribbondevelopment.checkout;
+package uk.co.redribbondevelopment.checkout.product;
 
 public class ProductNotFoundException extends RuntimeException {
 

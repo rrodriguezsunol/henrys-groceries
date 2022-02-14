@@ -1,32 +1,23 @@
 package uk.co.redribbondevelopment.checkout;
 
-import java.util.List;
+import uk.co.redribbondevelopment.checkout.product.Product;
+import uk.co.redribbondevelopment.checkout.product.ProductService;
+
 import java.util.Objects;
 
 public final class Checkout {
+    private final ProductService productService;
+
     private Product selectedProduct = null;
-    private final List<Product> productDefinitions = List.of(
-            new Product("soup", 65),
-            new Product("bread", 80),
-            new Product("milk", 130),
-            new Product("apples", 10)
-    );
 
-    private Checkout() {
-
-    }
-
-    public static Checkout startNew() {
-        return new Checkout();
+    Checkout(ProductService productService) {
+        this.productService = productService;
     }
 
     public void addItem(String productName) {
         Objects.requireNonNull(productName, "productName cannot be null");
 
-        selectedProduct = productDefinitions.stream()
-                .filter(product -> product.getName().equals(productName))
-                .findFirst()
-                .orElseThrow(() -> new ProductNotFoundException(productName));
+        selectedProduct = productService.findByName(productName);
     }
 
     public int getTotalCost() {
