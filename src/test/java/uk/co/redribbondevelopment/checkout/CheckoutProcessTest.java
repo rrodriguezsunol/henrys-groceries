@@ -24,7 +24,7 @@ class CheckoutProcessTest {
 
         @ParameterizedTest
         @MethodSource("productNameAndCostProvider")
-        void addSingleProductToBasket(String productName, int expectedProductCost) {
+        void addSingleProductToThenBasket(String productName, int expectedProductCost) {
             checkout.addItem(productName);
 
             assertThat(checkout.getTotalCost()).isEqualTo(expectedProductCost);
@@ -63,4 +63,27 @@ class CheckoutProcessTest {
             assertThat(caughtException).hasMessage("Product 'foobar' not found");
         }
     }
+
+    @Nested
+    class SingleProductWithQuantityBasketTest {
+
+        @Test
+        void addTwoApplesToTheBasket() {
+            checkout.addItem("apples");
+            checkout.addItem("apples");
+
+            assertThat(checkout.getTotalCost()).isEqualTo(20);
+        }
+
+        @Test
+        void addThreeApplesToTheBasket() {
+            checkout.addItem("apples");
+            checkout.addItem("apples");
+            checkout.addItem("apples");
+
+            assertThat(checkout.getTotalCost()).isEqualTo(30);
+        }
+    }
+
+    // Todo: handle multiple products in the same basket
 }

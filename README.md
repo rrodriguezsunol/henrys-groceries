@@ -69,4 +69,7 @@ In order to run all the tests you need to run **`mvn clean test`**.
 
 ## Design Decisions
 
-Convert Product as a `record` or `class?  
+Set a limit on Product cost to avoid integer overflow?
+Set a limit on quantity of a single product to avoid integer overflow?
+
+Convert Product as a `record` or `class`?
