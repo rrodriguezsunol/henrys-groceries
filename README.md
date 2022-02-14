@@ -1,6 +1,6 @@
 # Henry's Groceries
 
-This is a CLI application that allows customers to add products to their basket and displays the order's total, applying 
+This is a CLI application that allows customers to add products to their basket and displays its total, applying 
 any relevant promotions.
 
 ## Development Environment Setup
@@ -30,7 +30,7 @@ Copy the path displayed. You're going to need it for Maven set up.
 
 ### Maven
 
-We use Maven as the project's build tool. Install version 3.5.0 or later.
+This project uses Maven as the project's build tool. Install version 3.5.0 or later.
 
 Configure the `settings.xml` located in `~/.m2` maven repository. You need to specify the path to JDK 17 by creating a
 new profile and setting the `JAVA_17_HOME` property. It should look like this:
@@ -61,8 +61,12 @@ new profile and setting the `JAVA_17_HOME` property. It should look like this:
 ### Build
 
 
-### Tests and Coverage
+### Tests
 
-In order to run all the tests you need to run **`mvn clean verify`**.
+In order to run all the tests you need to run **`mvn clean test`**.
 
 ### Run the Application Locally
+
+## Design Decisions
+
+Convert Product as a `record` or `class?  
