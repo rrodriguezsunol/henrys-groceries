@@ -1,6 +1,6 @@
 package uk.co.redribbondevelopment.checkout.stock_item;
 
-public class StockItem {
+public final class StockItem {
     private final String name;
     private final int cost;
 

@@ -69,6 +69,8 @@ In order to run all the tests you need to run **`mvn clean test`**.
 
 ## Design Decisions
 
+Store price of stock items in pence to avoid gotchas with decimal operations.
+
 Set a limit on stock item cost to avoid integer overflow?
 Set a limit on quantity of a single stockItem to avoid integer overflow?
 

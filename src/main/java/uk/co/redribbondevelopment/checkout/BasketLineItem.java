@@ -4,7 +4,7 @@ import uk.co.redribbondevelopment.checkout.stock_item.StockItem;
 
 import java.util.Objects;
 
-public class OrderLineItem {
+public final class OrderLineItem {
     private final StockItem selectedStockItem;
     private int quantity;
 
@@ -25,5 +25,9 @@ public class OrderLineItem {
 
     public void incrementQuantity() {
         quantity++;
+    }
+
+    public String getItemName() {
+        return selectedStockItem.getName();
     }
 }

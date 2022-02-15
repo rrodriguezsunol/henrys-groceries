@@ -65,7 +65,7 @@ class CheckoutProcessTest {
     }
 
     @Nested
-    class SingleStockItemWithQuantityBasketTest {
+    class SingleStockItemWithQuantityInTheBasketTest {
 
         @Test
         void addTwoApplesToTheBasket() {
@@ -85,5 +85,19 @@ class CheckoutProcessTest {
         }
     }
 
-    // Todo: handle multiple different items in the same basket
+    @Nested
+    class MultipleStockItemsWithDifferentQuantitiesInTheBasketTest {
+
+        @Test
+        void multipleStockItems() {
+            checkout.addItem("soup");
+            checkout.addItem("bread");
+            checkout.addItem("apples");
+            checkout.addItem("bread");
+            checkout.addItem("soup");
+            checkout.addItem("bread");
+
+            assertThat(checkout.getTotalCost()).isEqualTo(380);
+        }
+    }
 }

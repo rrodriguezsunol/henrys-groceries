@@ -2,7 +2,7 @@ package uk.co.redribbondevelopment.checkout.stock_item;
 
 import java.util.List;
 
-public class InMemoryStockItemService implements StockItemService {
+public final class InMemoryStockItemService implements StockItemService {
 
     private final List<StockItem> stockItemDefinitions = List.of(
             new StockItem("soup", 65),

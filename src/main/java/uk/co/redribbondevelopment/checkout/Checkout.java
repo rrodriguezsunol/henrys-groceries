@@ -7,7 +7,7 @@ import java.util.Objects;
 public final class Checkout {
     private final StockItemService stockItemService;
 
-    private OrderLineItem orderLineItem = null;
+    private Order order;
 
     Checkout(StockItemService stockItemService) {
         this.stockItemService = stockItemService;
@@ -18,14 +18,14 @@ public final class Checkout {
 
         var selectedStockItem = stockItemService.findByName(itemName);
 
-        if (Objects.isNull(orderLineItem)) {
-            orderLineItem = new OrderLineItem(selectedStockItem);
-        } else {
-            orderLineItem.incrementQuantity();
+        if (Objects.isNull(order)) {
+            order = new Order();
         }
+
+        order.addItem(selectedStockItem);
     }
 
     public int getTotalCost() {
-        return orderLineItem.getLineTotal();
+        return order.getTotalCost();
     }
 }
