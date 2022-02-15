@@ -13,9 +13,7 @@ public final class Basket {
     public void addItem(StockItem selectedStockItem) {
         Objects.requireNonNull(selectedStockItem, "selectedStockItem cannot be null");
 
-        Optional<BasketLineItem> foundItem = lineItems.stream()
-                .filter(basketLineItem -> basketLineItem.getItemName().equals(selectedStockItem.name()))
-                .findFirst();
+        Optional<BasketLineItem> foundItem = findLineItem(selectedStockItem);
 
         if (foundItem.isEmpty()) {
             lineItems.add(new BasketLineItem(selectedStockItem));
@@ -26,5 +24,16 @@ public final class Basket {
 
     public int getTotalCost() {
         return lineItems.stream().mapToInt(BasketLineItem::getLineTotal).sum();
+    }
+
+    public int getQuantityOf(StockItem stockItem) {
+        return findLineItem(stockItem)
+                .map(BasketLineItem::getQuantity).orElse(0);
+    }
+
+    private Optional<BasketLineItem> findLineItem(StockItem selectedStockItem) {
+        return lineItems.stream()
+                .filter(basketLineItem -> basketLineItem.getItemName().equals(selectedStockItem.name()))
+                .findFirst();
     }
 }

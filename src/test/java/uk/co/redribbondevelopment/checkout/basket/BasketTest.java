@@ -19,6 +19,19 @@ class BasketTest {
     @Nested
     class AddItemTest {
         @Test
+        void incrementsQuantityByOneWhenItemNameMatchesQuantityIsNotSpecified() {
+            StockItem apples = new StockItem("apples", 10);
+
+            Basket basket = new Basket();
+            basket.addItem(apples);
+
+            assertThat(basket.getQuantityOf(apples)).isEqualTo(1);
+
+            basket.addItem(apples);
+            assertThat(basket.getQuantityOf(apples)).isEqualTo(2);
+        }
+
+        @Test
         void throwsExceptionWhenStockItemIsNull() {
             Basket basket = new Basket();
 
