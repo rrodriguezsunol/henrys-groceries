@@ -5,7 +5,7 @@ any relevant promotions.
 
 ## Development Environment Setup
 
-In order to be able to build, run and execute the tests, you need to follow this guide. After cloning this project,
+In basket to be able to build, run and execute the tests, you need to follow this guide. After cloning this project,
 install the following software, and also apply the configuration changes mentioned below.
 
 ### Java 17
@@ -63,7 +63,7 @@ new profile and setting the `JAVA_17_HOME` property. It should look like this:
 
 ### Tests
 
-In order to run all the tests you need to run **`mvn clean test`**.
+In basket to run all the tests you need to run **`mvn clean test`**.
 
 ### Run the Application Locally
 

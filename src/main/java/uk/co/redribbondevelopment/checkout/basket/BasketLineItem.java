@@ -1,33 +1,33 @@
-package uk.co.redribbondevelopment.checkout;
+package uk.co.redribbondevelopment.checkout.basket;
 
 import uk.co.redribbondevelopment.checkout.stock_item.StockItem;
 
 import java.util.Objects;
 
-public final class OrderLineItem {
+final class BasketLineItem {
     private final StockItem selectedStockItem;
     private int quantity;
 
-    public OrderLineItem(StockItem selectedStockItem) {
+    BasketLineItem(StockItem selectedStockItem) {
         Objects.requireNonNull(selectedStockItem, "selectedStockItem cannot be null");
 
         this.selectedStockItem = selectedStockItem;
         this.quantity = 1;
     }
 
-    public int getLineTotal() {
-        return selectedStockItem.getCost() * quantity;
+    int getLineTotal() {
+        return selectedStockItem.cost() * quantity;
     }
 
-    public int getQuantity() {
+    int getQuantity() {
         return quantity;
     }
 
-    public void incrementQuantity() {
+    void incrementQuantity() {
         quantity++;
     }
 
-    public String getItemName() {
-        return selectedStockItem.getName();
+    String getItemName() {
+        return selectedStockItem.name();
     }
 }

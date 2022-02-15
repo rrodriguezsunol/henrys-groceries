@@ -14,7 +14,7 @@ public final class InMemoryStockItemService implements StockItemService {
     @Override
     public StockItem findByName(String name) {
         return stockItemDefinitions.stream()
-                .filter(stockItem -> stockItem.getName().equals(name))
+                .filter(stockItem -> stockItem.name().equals(name))
                 .findFirst()
                 .orElseThrow(() -> new ItemNotFoundException(name));
     }

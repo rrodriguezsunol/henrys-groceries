@@ -1,4 +1,4 @@
-package uk.co.redribbondevelopment.checkout;
+package uk.co.redribbondevelopment.checkout.basket;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -7,40 +7,40 @@ import uk.co.redribbondevelopment.checkout.stock_item.StockItem;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
 
-class OrderLineItemTest {
+class BasketLineItemTest {
 
     private final StockItem onePenceStockItem = new StockItem("foo", 1);
     @Test
     void constructorThrowsExceptionWhenStockItemIsNull() {
         NullPointerException caughtException = catchThrowableOfType(
-                () -> new OrderLineItem(null), NullPointerException.class);
+                () -> new BasketLineItem(null), NullPointerException.class);
 
         assertThat(caughtException).hasMessage("selectedStockItem cannot be null");
     }
 
     @Test
     void newInstanceStartsWithQuantityOfOne() {
-        var orderLineItem = new OrderLineItem(onePenceStockItem);
+        var basketLineItem = new BasketLineItem(onePenceStockItem);
 
-        assertThat(orderLineItem.getQuantity()).isEqualTo(1);
+        assertThat(basketLineItem.getQuantity()).isEqualTo(1);
     }
 
     @Nested
-    class OrderLineTotalTest {
+    class BasketLineTotalTest {
 
         @Test
         void returnsTheCostOfOneUnitWhenTheQuantityIsOne() {
-            var orderLineItem = new OrderLineItem(onePenceStockItem);
+            var basketLineItem = new BasketLineItem(onePenceStockItem);
 
-            assertThat(orderLineItem.getLineTotal()).isEqualTo(1);
+            assertThat(basketLineItem.getLineTotal()).isEqualTo(1);
         }
 
         @Test
         void returnsTheCostOfTwoUnitsWhenTheQuantityIsTwo() {
-            var orderLineItem = new OrderLineItem(onePenceStockItem);
-            orderLineItem.incrementQuantity();
+            var basketLineItem = new BasketLineItem(onePenceStockItem);
+            basketLineItem.incrementQuantity();
 
-            assertThat(orderLineItem.getLineTotal()).isEqualTo(2);
+            assertThat(basketLineItem.getLineTotal()).isEqualTo(2);
         }
     }
 }
