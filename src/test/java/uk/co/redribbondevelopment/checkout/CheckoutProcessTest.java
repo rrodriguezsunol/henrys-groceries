@@ -99,5 +99,14 @@ class CheckoutProcessTest {
 
             assertThat(checkout.getTotalCost()).isEqualTo(380);
         }
+
+        @Test
+        void multipleStockItemsV2() {
+            checkout.addItem("soup", 2);
+            checkout.addItem("bread", 3);
+            checkout.addItem("apples");
+
+            assertThat(checkout.getTotalCost()).isEqualTo(380);
+        }
     }
 }

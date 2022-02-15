@@ -15,6 +15,10 @@ public final class Checkout {
     }
 
     public void addItem(String itemName) {
+        addItem(itemName, 1);
+    }
+
+    public void addItem(String itemName, int quantity) {
         Objects.requireNonNull(itemName, "itemName cannot be null");
 
         var selectedStockItem = stockItemService.findByName(itemName);
@@ -23,7 +27,7 @@ public final class Checkout {
             basket = new Basket();
         }
 
-        basket.addItem(selectedStockItem);
+        basket.addItem(selectedStockItem, quantity);
     }
 
     public int getTotalCost() {

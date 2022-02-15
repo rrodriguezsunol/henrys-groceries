@@ -9,10 +9,14 @@ final class BasketLineItem {
     private int quantity;
 
     BasketLineItem(StockItem selectedStockItem) {
+        this(selectedStockItem, 1);
+    }
+
+    BasketLineItem(StockItem selectedStockItem, int quantity) {
         Objects.requireNonNull(selectedStockItem, "selectedStockItem cannot be null");
 
         this.selectedStockItem = selectedStockItem;
-        this.quantity = 1;
+        setQuantity(quantity);
     }
 
     int getLineTotal() {
@@ -29,5 +33,15 @@ final class BasketLineItem {
 
     String getItemName() {
         return selectedStockItem.name();
+    }
+
+    void setQuantity(int quantity) {
+        if (quantity < 1) {
+            throw new IllegalArgumentException("quantity cannot be less than 1. quantity = " + quantity);
+        } else if (quantity > 999) {
+            throw new IllegalArgumentException("quantity cannot be greater than 999. quantity = " + quantity);
+        }
+
+        this.quantity = quantity;
     }
 }

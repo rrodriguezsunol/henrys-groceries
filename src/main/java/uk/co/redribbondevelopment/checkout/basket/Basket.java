@@ -11,14 +11,19 @@ public final class Basket {
     private final List<BasketLineItem> lineItems = new ArrayList<>();
 
     public void addItem(StockItem selectedStockItem) {
+        addItem(selectedStockItem, 1);
+    }
+
+    public void addItem(StockItem selectedStockItem, int quantity) {
         Objects.requireNonNull(selectedStockItem, "selectedStockItem cannot be null");
 
         Optional<BasketLineItem> foundItem = findLineItem(selectedStockItem);
 
         if (foundItem.isEmpty()) {
-            lineItems.add(new BasketLineItem(selectedStockItem));
+            lineItems.add(new BasketLineItem(selectedStockItem, quantity));
         } else {
-            foundItem.get().incrementQuantity();
+            BasketLineItem basketLineItem = foundItem.get();
+            basketLineItem.setQuantity(basketLineItem.getQuantity() + quantity);
         }
     }
 

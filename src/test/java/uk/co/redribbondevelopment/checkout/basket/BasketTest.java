@@ -18,17 +18,39 @@ class BasketTest {
 
     @Nested
     class AddItemTest {
+        private final Basket basket = new Basket();
+
+        // Test Data
+        private final StockItem apples = new StockItem("apples", 10);
+
         @Test
         void incrementsQuantityByOneWhenItemNameMatchesQuantityIsNotSpecified() {
-            StockItem apples = new StockItem("apples", 10);
-
             Basket basket = new Basket();
             basket.addItem(apples);
 
-            assertThat(basket.getQuantityOf(apples)).isEqualTo(1);
+            assertThat(basket.getQuantityOf(apples)).isOne();
 
             basket.addItem(apples);
             assertThat(basket.getQuantityOf(apples)).isEqualTo(2);
+
+            basket.addItem(apples);
+            assertThat(basket.getQuantityOf(apples)).isEqualTo(3);
+        }
+
+        @Test
+        void addsItemWithSpecifiedQuantityToTheBasket() {
+            Basket basket = new Basket();
+            basket.addItem(apples, 10);
+
+            assertThat(basket.getQuantityOf(apples)).isEqualTo(10);
+        }
+
+        @Test
+        void addingTheSameItemTwiceWithDifferentQuantitiesAddsThemUpToTheBasket() {
+            basket.addItem(apples, 10);
+            basket.addItem(apples, 5);
+
+            assertThat(basket.getQuantityOf(apples)).isEqualTo(15);
         }
 
         @Test
@@ -43,11 +65,18 @@ class BasketTest {
         @Test
         void throwsExceptionWhenStockItemIsNullAndBasketHasItems() {
             Basket basket = new Basket();
-            basket.addItem(new StockItem("apples", 10));
+            basket.addItem(apples);
 
             NullPointerException caughtException = catchThrowableOfType(() -> basket.addItem(null), NullPointerException.class);
 
             assertThat(caughtException).hasMessage("selectedStockItem cannot be null");
+        }
+
+        @Test
+        void throwsExceptionWhenQuantityIsZero() {
+            var caughtException = catchThrowableOfType(() -> basket.addItem(apples, 0), IllegalArgumentException.class);
+
+            assertThat(caughtException).hasMessage("quantity cannot be less than 1. quantity = 0");
         }
     }
 }
