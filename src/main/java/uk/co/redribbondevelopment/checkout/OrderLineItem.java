@@ -1,22 +1,22 @@
 package uk.co.redribbondevelopment.checkout;
 
-import uk.co.redribbondevelopment.checkout.product.Product;
+import uk.co.redribbondevelopment.checkout.stock_item.StockItem;
 
 import java.util.Objects;
 
 public class OrderLineItem {
-    private final Product selectedProduct;
+    private final StockItem selectedStockItem;
     private int quantity;
 
-    public OrderLineItem(Product selectedProduct) {
-        Objects.requireNonNull(selectedProduct, "selectedProduct cannot be null");
+    public OrderLineItem(StockItem selectedStockItem) {
+        Objects.requireNonNull(selectedStockItem, "selectedStockItem cannot be null");
 
-        this.selectedProduct = selectedProduct;
+        this.selectedStockItem = selectedStockItem;
         this.quantity = 1;
     }
 
     public int getLineTotal() {
-        return selectedProduct.getCost() * quantity;
+        return selectedStockItem.getCost() * quantity;
     }
 
     public int getQuantity() {

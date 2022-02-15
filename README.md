@@ -1,6 +1,6 @@
 # Henry's Groceries
 
-This is a CLI application that allows customers to add products to their basket and displays its total, applying 
+This is a CLI application that allows customers to add stock items to their basket and displays its total, applying 
 any relevant promotions.
 
 ## Development Environment Setup
@@ -69,7 +69,7 @@ In order to run all the tests you need to run **`mvn clean test`**.
 
 ## Design Decisions
 
-Set a limit on Product cost to avoid integer overflow?
-Set a limit on quantity of a single product to avoid integer overflow?
+Set a limit on stock item cost to avoid integer overflow?
+Set a limit on quantity of a single stockItem to avoid integer overflow?
 
-Convert Product as a `record` or `class`?
+Should item be a `record` or `class`?

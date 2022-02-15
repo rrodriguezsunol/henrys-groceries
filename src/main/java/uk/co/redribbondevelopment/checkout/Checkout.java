@@ -1,25 +1,25 @@
 package uk.co.redribbondevelopment.checkout;
 
-import uk.co.redribbondevelopment.checkout.product.ProductService;
+import uk.co.redribbondevelopment.checkout.stock_item.StockItemService;
 
 import java.util.Objects;
 
 public final class Checkout {
-    private final ProductService productService;
+    private final StockItemService stockItemService;
 
     private OrderLineItem orderLineItem = null;
 
-    Checkout(ProductService productService) {
-        this.productService = productService;
+    Checkout(StockItemService stockItemService) {
+        this.stockItemService = stockItemService;
     }
 
-    public void addItem(String productName) {
-        Objects.requireNonNull(productName, "productName cannot be null");
+    public void addItem(String itemName) {
+        Objects.requireNonNull(itemName, "itemName cannot be null");
 
-        var selectedProduct = productService.findByName(productName);
+        var selectedStockItem = stockItemService.findByName(itemName);
 
         if (Objects.isNull(orderLineItem)) {
-            orderLineItem = new OrderLineItem(selectedProduct);
+            orderLineItem = new OrderLineItem(selectedStockItem);
         } else {
             orderLineItem.incrementQuantity();
         }

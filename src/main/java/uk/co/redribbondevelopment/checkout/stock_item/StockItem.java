@@ -1,10 +1,10 @@
-package uk.co.redribbondevelopment.checkout.product;
+package uk.co.redribbondevelopment.checkout.stock_item;
 
-public class Product {
+public class StockItem {
     private final String name;
     private final int cost;
 
-    public Product(String name, int cost) {
+    public StockItem(String name, int cost) {
         this.name = name;
         this.cost = cost;
     }

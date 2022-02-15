@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import uk.co.redribbondevelopment.checkout.product.InMemoryProductService;
-import uk.co.redribbondevelopment.checkout.product.ProductNotFoundException;
+import uk.co.redribbondevelopment.checkout.stock_item.InMemoryStockItemService;
+import uk.co.redribbondevelopment.checkout.stock_item.ItemNotFoundException;
 
 import java.util.stream.Stream;
 
@@ -16,21 +16,21 @@ import static org.assertj.core.api.Assertions.catchThrowableOfType;
 
 class CheckoutProcessTest {
 
-    private final Checkout checkout = new Checkout(new InMemoryProductService());
+    private final Checkout checkout = new Checkout(new InMemoryStockItemService());
 
     @Nested
-    @DisplayName("Single product basket")
-    class SingleProductBasketTest {
+    @DisplayName("Single stock item basket")
+    class SingleStockItemBasketTest {
 
         @ParameterizedTest
-        @MethodSource("productNameAndCostProvider")
-        void addSingleProductToThenBasket(String productName, int expectedProductCost) {
-            checkout.addItem(productName);
+        @MethodSource("itemNameAndCostProvider")
+        void addSingleItemToTheBasket(String itemName, int expectedItemCost) {
+            checkout.addItem(itemName);
 
-            assertThat(checkout.getTotalCost()).isEqualTo(expectedProductCost);
+            assertThat(checkout.getTotalCost()).isEqualTo(expectedItemCost);
         }
 
-        static Stream<Arguments> productNameAndCostProvider() {
+        static Stream<Arguments> itemNameAndCostProvider() {
             return Stream.of(
                     Arguments.of("soup", 65),
                     Arguments.of("bread", 80),
@@ -40,32 +40,32 @@ class CheckoutProcessTest {
         }
 
         @Test
-        void throwsExceptionWhenProductNameIsNull() {
+        void throwsExceptionWhenItemNameIsNull() {
             NullPointerException caughtException = catchThrowableOfType(
                     () -> checkout.addItem(null), NullPointerException.class);
 
-            assertThat(caughtException).hasMessage("productName cannot be null");
+            assertThat(caughtException).hasMessage("itemName cannot be null");
         }
 
         @Test
-        void throwsExceptionWhenProductNameIsEmpty() {
-            ProductNotFoundException caughtException = catchThrowableOfType(
-                    () -> checkout.addItem(""), ProductNotFoundException.class);
+        void throwsExceptionWhenItemNameIsEmpty() {
+            ItemNotFoundException caughtException = catchThrowableOfType(
+                    () -> checkout.addItem(""), ItemNotFoundException.class);
 
-            assertThat(caughtException).hasMessage("Product '' not found");
+            assertThat(caughtException).hasMessage("Item '' not found");
         }
 
         @Test
-        void throwsExceptionWhenProductNameDoesNotExist() {
-            ProductNotFoundException caughtException = catchThrowableOfType(
-                    () -> checkout.addItem("foobar"), ProductNotFoundException.class);
+        void throwsExceptionWhenItemNameDoesNotExist() {
+            ItemNotFoundException caughtException = catchThrowableOfType(
+                    () -> checkout.addItem("foobar"), ItemNotFoundException.class);
 
-            assertThat(caughtException).hasMessage("Product 'foobar' not found");
+            assertThat(caughtException).hasMessage("Item 'foobar' not found");
         }
     }
 
     @Nested
-    class SingleProductWithQuantityBasketTest {
+    class SingleStockItemWithQuantityBasketTest {
 
         @Test
         void addTwoApplesToTheBasket() {
@@ -85,5 +85,5 @@ class CheckoutProcessTest {
         }
     }
 
-    // Todo: handle multiple products in the same basket
+    // Todo: handle multiple different items in the same basket
 }
