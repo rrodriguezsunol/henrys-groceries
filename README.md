@@ -58,12 +58,9 @@ new profile and setting the `JAVA_17_HOME` property. It should look like this:
 ## Build and Run this Project
 
 
-### Build
+### Build & Tests
 
-
-### Tests
-
-In basket to run all the tests you need to run **`mvn clean test`**.
+To run all the tests and build this artifact, you need to run **`mvn clean verify`**.
 
 ### Run the Application Locally
 
@@ -71,7 +68,7 @@ In basket to run all the tests you need to run **`mvn clean test`**.
 
 Store price of stock items in pence to avoid gotchas with decimal operations.
 
+Represented `StockItem` as record to reduce boilerplate code in the class, mainly getter.
+
 Set a limit on stock item cost to avoid integer overflow?
 Set a limit on quantity of a single stockItem to avoid integer overflow?
-
-Should item be a `record` or `class`?
