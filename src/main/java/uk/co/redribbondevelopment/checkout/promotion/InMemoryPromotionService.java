@@ -30,18 +30,13 @@ public final class InMemoryPromotionService implements PromotionService {
     public Collection<Promotion> findApplicable(Basket basket) {
         var today = LocalDate.now(clock);
 
-        if ((today.isEqual(promotionRule.validFrom) || today.isAfter(promotionRule.validFrom))
-                && (today.isEqual(promotionRule.validTo) || today.isBefore(promotionRule.validTo))) {
+        if ((today.isEqual(promotionRule.getValidFrom()) || today.isAfter(promotionRule.getValidFrom()))
+                && (today.isEqual(promotionRule.getValidTo()) || today.isBefore(promotionRule.getValidTo()))) {
 
-            var quantity = basket.getQuantityOf(promotionRule.applicableStockItem);
+            var quantity = basket.getQuantityOf(promotionRule.getApplicableStockItem());
 
             if (quantity != 0) {
-                var unitPrice = promotionRule.applicableStockItem.cost();
-
-                var totalPriceBeforeDiscount = quantity * unitPrice;
-                var amountDiscounted = (totalPriceBeforeDiscount * promotionRule.discountPercentage) / 100;
-
-                return List.of(new Promotion(amountDiscounted));
+                return List.of(new Promotion(promotionRule.calculateDiscountAmount(quantity)));
             }
         }
 
