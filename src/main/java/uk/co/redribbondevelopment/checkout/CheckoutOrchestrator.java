@@ -1,8 +1,8 @@
 package uk.co.redribbondevelopment.checkout;
 
 import uk.co.redribbondevelopment.checkout.basket.Basket;
-import uk.co.redribbondevelopment.checkout.promotions.Promotion;
-import uk.co.redribbondevelopment.checkout.promotions.PromotionService;
+import uk.co.redribbondevelopment.checkout.promotion.Promotion;
+import uk.co.redribbondevelopment.checkout.promotion.PromotionService;
 import uk.co.redribbondevelopment.checkout.stock_item.StockItemService;
 
 import java.util.Collection;

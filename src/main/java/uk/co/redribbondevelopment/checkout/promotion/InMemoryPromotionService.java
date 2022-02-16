@@ -1,4 +1,4 @@
-package uk.co.redribbondevelopment.checkout.promotions;
+package uk.co.redribbondevelopment.checkout.promotion;
 
 import uk.co.redribbondevelopment.checkout.basket.Basket;
 import uk.co.redribbondevelopment.checkout.stock_item.StockItemService;

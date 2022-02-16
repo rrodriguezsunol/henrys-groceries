@@ -1,4 +1,4 @@
-package uk.co.redribbondevelopment.checkout.promotions;
+package uk.co.redribbondevelopment.checkout.promotion;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
