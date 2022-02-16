@@ -2,7 +2,7 @@ package uk.co.redribbondevelopment.checkout;
 
 import uk.co.redribbondevelopment.checkout.basket.Basket;
 import uk.co.redribbondevelopment.checkout.promotion.Promotion;
-import uk.co.redribbondevelopment.checkout.promotion.PromotionService;
+import uk.co.redribbondevelopment.checkout.promotion.PromotionsEngine;
 import uk.co.redribbondevelopment.checkout.stock_item.StockItemService;
 
 import java.util.Collection;
@@ -10,15 +10,15 @@ import java.util.Objects;
 
 public final class CheckoutOrchestrator {
     private final StockItemService stockItemService;
-    private final PromotionService promotionService;
+    private final PromotionsEngine promotionsEngine;
 
     private Basket basket;
     private Collection<Promotion> applicablePromotions;
 
 
-    public CheckoutOrchestrator(StockItemService stockItemService, PromotionService promotionService) {
+    public CheckoutOrchestrator(StockItemService stockItemService, PromotionsEngine promotionsEngine) {
         this.stockItemService = stockItemService;
-        this.promotionService = promotionService;
+        this.promotionsEngine = promotionsEngine;
     }
 
     public void addItem(String itemName) {
@@ -35,7 +35,7 @@ public final class CheckoutOrchestrator {
         }
 
         basket.addItem(selectedStockItem, quantity);
-        applicablePromotions = promotionService.findApplicable(basket);
+        applicablePromotions = promotionsEngine.findApplicable(basket);
     }
 
     public int getTotalCost() {

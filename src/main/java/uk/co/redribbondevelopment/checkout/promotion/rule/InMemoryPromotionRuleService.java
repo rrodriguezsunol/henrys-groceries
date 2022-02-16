@@ -1,6 +1,5 @@
-package uk.co.redribbondevelopment.checkout.promotion;
+package uk.co.redribbondevelopment.checkout.promotion.rule;
 
-import uk.co.redribbondevelopment.checkout.basket.Basket;
 import uk.co.redribbondevelopment.checkout.stock_item.StockItemService;
 
 import java.time.Clock;
@@ -8,16 +7,15 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
-public final class InMemoryPromotionService implements PromotionService {
-
+public class InMemoryPromotionRuleService implements PromotionRuleService {
     private final Clock clock;
 
     private final PromotionRule promotionRule;
 
-    public InMemoryPromotionService(StockItemService stockItemService, Clock clock) {
+    public InMemoryPromotionRuleService(StockItemService stockItemService, Clock clock) {
         this.clock = clock;
-        var now = LocalDate.now(clock);
 
+        var now = LocalDate.now(clock);
         promotionRule = new PromotionRule(
                 "Apples have a 10% discount",
                 now.plusDays(3),
@@ -27,17 +25,12 @@ public final class InMemoryPromotionService implements PromotionService {
     }
 
     @Override
-    public Collection<Promotion> findApplicable(Basket basket) {
+    public Collection<PromotionRule> findActiveToday() {
         var today = LocalDate.now(clock);
 
         if ((today.isEqual(promotionRule.getValidFrom()) || today.isAfter(promotionRule.getValidFrom()))
                 && (today.isEqual(promotionRule.getValidTo()) || today.isBefore(promotionRule.getValidTo()))) {
-
-            var quantity = basket.getQuantityOf(promotionRule.getApplicableStockItem());
-
-            if (quantity != 0) {
-                return List.of(new Promotion(promotionRule.calculateDiscountAmount(quantity)));
-            }
+            return List.of(promotionRule);
         }
 
         return List.of();

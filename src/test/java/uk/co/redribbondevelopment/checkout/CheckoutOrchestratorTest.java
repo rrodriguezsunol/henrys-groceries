@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import uk.co.redribbondevelopment.checkout.promotion.InMemoryPromotionService;
-import uk.co.redribbondevelopment.checkout.promotion.PromotionService;
+import uk.co.redribbondevelopment.checkout.promotion.InMemoryPromotionsEngine;
+import uk.co.redribbondevelopment.checkout.promotion.PromotionsEngine;
+import uk.co.redribbondevelopment.checkout.promotion.rule.InMemoryPromotionRuleService;
 import uk.co.redribbondevelopment.checkout.stock_item.InMemoryStockItemService;
 import uk.co.redribbondevelopment.checkout.stock_item.ItemNotFoundException;
 import uk.co.redribbondevelopment.checkout.stock_item.StockItemService;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.mock;
 
 class CheckoutOrchestratorTest {
 
-    private final CheckoutOrchestrator checkoutOrchestrator = new CheckoutOrchestrator(new InMemoryStockItemService(), mock(PromotionService.class));
+    private final CheckoutOrchestrator checkoutOrchestrator = new CheckoutOrchestrator(new InMemoryStockItemService(), mock(PromotionsEngine.class));
 
     @Nested
     @DisplayName("Single stock item basket")
@@ -127,7 +128,9 @@ class CheckoutOrchestratorTest {
             given(mockedClock.instant()).willReturn(Instant.parse("2022-02-15T00:00:00Z"));
 
             StockItemService stockItemService = new InMemoryStockItemService();
-            CheckoutOrchestrator timeBasedCheckoutOrchestrator = new CheckoutOrchestrator(stockItemService, new InMemoryPromotionService(stockItemService, mockedClock));
+            CheckoutOrchestrator timeBasedCheckoutOrchestrator = new CheckoutOrchestrator(
+                    stockItemService, new InMemoryPromotionsEngine(
+                            new InMemoryPromotionRuleService(stockItemService, mockedClock)));
 
             given(mockedClock.instant()).willReturn(Instant.parse("2022-02-20T00:00:00Z"));
 

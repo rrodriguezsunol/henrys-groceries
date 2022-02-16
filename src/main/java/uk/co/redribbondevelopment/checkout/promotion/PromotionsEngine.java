@@ -4,7 +4,7 @@ import uk.co.redribbondevelopment.checkout.basket.Basket;
 
 import java.util.Collection;
 
-public interface PromotionService {
+public interface PromotionsEngine {
 
     Collection<Promotion> findApplicable(Basket basket);
 }
