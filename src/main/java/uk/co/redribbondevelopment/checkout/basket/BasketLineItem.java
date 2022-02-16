@@ -35,6 +35,10 @@ final class BasketLineItem {
         return selectedStockItem.name();
     }
 
+    StockItem getItem() {
+        return selectedStockItem;
+    }
+
     void setQuantity(int quantity) {
         if (quantity < 1) {
             throw new IllegalArgumentException("quantity cannot be less than 1. quantity = " + quantity);

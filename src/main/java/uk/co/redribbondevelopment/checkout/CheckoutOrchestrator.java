@@ -39,7 +39,7 @@ public final class CheckoutOrchestrator {
     }
 
     public int getTotalCost() {
-        int totalDiscount = applicablePromotions.stream().mapToInt(Promotion::discountedAmount).sum();
+        int totalDiscount = applicablePromotions.stream().mapToInt(Promotion::getDiscountedAmount).sum();
         return basket.getTotalCost() - totalDiscount;
     }
 }

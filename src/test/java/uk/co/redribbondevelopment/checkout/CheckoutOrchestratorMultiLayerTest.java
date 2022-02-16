@@ -28,15 +28,18 @@ class CheckoutOrchestratorMultiLayerTest {
 
     private final Clock mockedClock = mock(Clock.class);
 
+    // Dependencies
+    private StockItemService stockItemService = new InMemoryStockItemService();
+
     @BeforeEach
     void setUpTestSubject() {
         given(mockedClock.getZone()).willReturn(Clock.systemDefaultZone().getZone());
         given(mockedClock.instant()).willReturn(Instant.now());
 
-        StockItemService stockItemService = new InMemoryStockItemService();
         checkoutOrchestrator = new CheckoutOrchestrator(
                 stockItemService,
-                new InMemoryPromotionsEngine(new InMemoryPromotionRuleService(stockItemService, mockedClock)));
+                new InMemoryPromotionsEngine(
+                        new InMemoryPromotionRuleService(stockItemService, mockedClock)));
     }
 
     @Nested
@@ -139,7 +142,6 @@ class CheckoutOrchestratorMultiLayerTest {
             given(mockedClock.getZone()).willReturn(Clock.systemDefaultZone().getZone());
             given(mockedClock.instant()).willReturn(Instant.parse("2022-02-15T00:00:00Z"));
 
-            StockItemService stockItemService = new InMemoryStockItemService();
             CheckoutOrchestrator timeBasedCheckoutOrchestrator = new CheckoutOrchestrator(
                     stockItemService,
                     new InMemoryPromotionsEngine(
@@ -158,7 +160,6 @@ class CheckoutOrchestratorMultiLayerTest {
             given(mockedClock.getZone()).willReturn(Clock.systemDefaultZone().getZone());
             given(mockedClock.instant()).willReturn(Instant.parse("2022-02-15T00:00:00Z"));
 
-            StockItemService stockItemService = new InMemoryStockItemService();
             CheckoutOrchestrator timeBasedCheckoutOrchestrator = new CheckoutOrchestrator(
                     stockItemService, new InMemoryPromotionsEngine(
                             new InMemoryPromotionRuleService(stockItemService, mockedClock)));

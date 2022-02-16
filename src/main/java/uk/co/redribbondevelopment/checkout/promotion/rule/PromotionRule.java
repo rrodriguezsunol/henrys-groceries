@@ -1,8 +1,10 @@
 package uk.co.redribbondevelopment.checkout.promotion.rule;
 
+import uk.co.redribbondevelopment.checkout.common.StockItemQuantity;
 import uk.co.redribbondevelopment.checkout.stock_item.StockItem;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Objects;
 
 public final class PromotionRule {
@@ -26,14 +28,20 @@ public final class PromotionRule {
                 && (today.isEqual(validTo) || today.isBefore(validTo));
     }
 
-    public int calculateDiscountAmount(int quantity) {
-        var totalPriceBeforeDiscount = quantity * getApplicableStockItem().cost();
-
-        return  (totalPriceBeforeDiscount * discountPercentage) / 100;
+    public int getDiscountAmount() {
+        return  (getApplicableStockItem().cost() * discountPercentage) / 100;
     }
 
     public StockItem getApplicableStockItem() {
         return applicableStockItem;
+    }
+
+    public int getNumberOfMatches(Collection<StockItemQuantity> stockItemQuantities) {
+        return stockItemQuantities.stream()
+                .filter(stockItemQuantity -> stockItemQuantity.stockItem().equals(applicableStockItem))
+                .map(StockItemQuantity::quantity)
+                .findFirst()
+                .orElse(0);
     }
 
     @Override

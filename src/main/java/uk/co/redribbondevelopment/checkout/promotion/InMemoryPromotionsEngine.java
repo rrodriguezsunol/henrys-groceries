@@ -1,6 +1,7 @@
 package uk.co.redribbondevelopment.checkout.promotion;
 
 import uk.co.redribbondevelopment.checkout.basket.Basket;
+import uk.co.redribbondevelopment.checkout.common.StockItemQuantity;
 import uk.co.redribbondevelopment.checkout.promotion.rule.PromotionRule;
 import uk.co.redribbondevelopment.checkout.promotion.rule.PromotionRuleService;
 
@@ -20,10 +21,11 @@ public final class InMemoryPromotionsEngine implements PromotionsEngine {
         Collection<PromotionRule> activePromotions = promotionRuleService.findActiveToday();
 
         for (PromotionRule activePromo : activePromotions) {
-            int itemQuantity = basket.getQuantityOf(activePromo.getApplicableStockItem());
+            Collection<StockItemQuantity> itemsWithQuantities = basket.getItemsWithQuantities();
 
-            if (itemQuantity != 0) {
-                return List.of(new Promotion(activePromo.calculateDiscountAmount(itemQuantity)));
+            int numberOfMatches = activePromo.getNumberOfMatches(itemsWithQuantities);
+            if (numberOfMatches > 0) {
+                return List.of(new Promotion(activePromo.getDiscountAmount(), numberOfMatches));
             }
         }
 

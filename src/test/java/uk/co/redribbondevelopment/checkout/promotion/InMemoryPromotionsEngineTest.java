@@ -31,7 +31,7 @@ class InMemoryPromotionsEngineTest {
     }
 
     @Test
-    void activePromotionFoundButItemIsNotInTheBasket() {
+    void activeApplesPromotionFoundButItemIsNotInTheBasket() {
         given(mockedPromotionRuleService.findActiveToday()).willReturn(List.of(new PromotionRule(
                 "25% discount on apples",
                 LocalDate.now(),
@@ -47,7 +47,7 @@ class InMemoryPromotionsEngineTest {
     }
 
     @Test
-    void activePromotionFoundAndOneItemIsFoundInTheBasketThenTheDiscountIsAppliedOnce() {
+    void activeApplesPromotionFoundAndOneItemIsFoundInTheBasketThenTheDiscountIsAppliedOnce() {
         given(mockedPromotionRuleService.findActiveToday()).willReturn(List.of(new PromotionRule(
                 "25% discount on apples",
                 LocalDate.now(),
@@ -59,11 +59,11 @@ class InMemoryPromotionsEngineTest {
 
         Collection<Promotion> applicablePromotions = promotionsEngine.findApplicable(basketWithOneApple);
 
-        assertThat(applicablePromotions).containsExactly(new Promotion(25));
+        assertThat(applicablePromotions).containsExactly(new Promotion(25, 1));
     }
 
     @Test
-    void activePromotionFoundAndOneItemIsFoundInTheBasketThenTheDiscountIsAppliedThrice() {
+    void activeApplesPromotionFoundAndOneItemIsFoundInTheBasketThenTheDiscountIsAppliedThrice() {
         given(mockedPromotionRuleService.findActiveToday()).willReturn(List.of(new PromotionRule(
                 "25% discount on apples",
                 LocalDate.now(),
@@ -75,7 +75,7 @@ class InMemoryPromotionsEngineTest {
 
         Collection<Promotion> applicablePromotions = promotionsEngine.findApplicable(basketWithOneApple);
 
-        assertThat(applicablePromotions).containsExactly(new Promotion(75));
+        assertThat(applicablePromotions).containsExactly(new Promotion(25, 3));
     }
 
     @Test
