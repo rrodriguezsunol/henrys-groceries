@@ -1,17 +1,24 @@
 package uk.co.redribbondevelopment.checkout;
 
 import uk.co.redribbondevelopment.checkout.basket.Basket;
+import uk.co.redribbondevelopment.checkout.promotions.Promotion;
+import uk.co.redribbondevelopment.checkout.promotions.PromotionService;
 import uk.co.redribbondevelopment.checkout.stock_item.StockItemService;
 
+import java.util.Collection;
 import java.util.Objects;
 
 public final class Checkout {
     private final StockItemService stockItemService;
+    private final PromotionService promotionService;
 
     private Basket basket;
+    private Collection<Promotion> applicablePromotions;
 
-    Checkout(StockItemService stockItemService) {
+
+    public Checkout(StockItemService stockItemService, PromotionService promotionService) {
         this.stockItemService = stockItemService;
+        this.promotionService = promotionService;
     }
 
     public void addItem(String itemName) {
@@ -28,9 +35,11 @@ public final class Checkout {
         }
 
         basket.addItem(selectedStockItem, quantity);
+        applicablePromotions = promotionService.findApplicable(basket);
     }
 
     public int getTotalCost() {
-        return basket.getTotalCost();
+        int totalDiscount = applicablePromotions.stream().mapToInt(Promotion::discountedAmount).sum();
+        return basket.getTotalCost() - totalDiscount;
     }
 }

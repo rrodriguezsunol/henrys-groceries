@@ -64,11 +64,14 @@ To run all the tests and build this artifact, you need to run **`mvn clean verif
 
 ### Run the Application Locally
 
-## Design Decisions
+## Design Decisions and Assumptions
 
-Store price of stock items in pence to avoid gotchas with decimal operations.
+Model the price of stock items as an integer representing pence to avoid gotchas with decimal operations.
+
+I've set a limit of 999 on the quantity to avoid potential integer overflows.
+
+I've assumed the "valid from" and "valid to" dates of the promotions define an inclusive range.
 
 Represented `StockItem` as record to reduce boilerplate code in the class, mainly getter.
 
 Set a limit on stock item cost to avoid integer overflow?
-Set a limit on quantity of a single stockItem to avoid integer overflow?

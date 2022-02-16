@@ -6,17 +6,24 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import uk.co.redribbondevelopment.checkout.promotions.InMemoryPromotionService;
+import uk.co.redribbondevelopment.checkout.promotions.PromotionService;
 import uk.co.redribbondevelopment.checkout.stock_item.InMemoryStockItemService;
 import uk.co.redribbondevelopment.checkout.stock_item.ItemNotFoundException;
+import uk.co.redribbondevelopment.checkout.stock_item.StockItemService;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowableOfType;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 class CheckoutProcessTest {
 
-    private final Checkout checkout = new Checkout(new InMemoryStockItemService());
+    private final Checkout checkout = new Checkout(new InMemoryStockItemService(), mock(PromotionService.class));
 
     @Nested
     @DisplayName("Single stock item basket")
@@ -107,6 +114,27 @@ class CheckoutProcessTest {
             checkout.addItem("apples");
 
             assertThat(checkout.getTotalCost()).isEqualTo(380);
+        }
+    }
+
+    @Nested
+    class ApplesDiscountTest {
+        Clock mockedClock = mock(Clock.class);
+
+        @Test
+        void applesDiscount() {
+            given(mockedClock.getZone()).willReturn(Clock.systemDefaultZone().getZone());
+            given(mockedClock.instant()).willReturn(Instant.parse("2022-02-15T00:00:00Z"));
+
+            StockItemService stockItemService = new InMemoryStockItemService();
+            Checkout timeBasedCheckout = new Checkout(stockItemService, new InMemoryPromotionService(stockItemService, mockedClock));
+
+            given(mockedClock.instant()).willReturn(Instant.parse("2022-02-20T00:00:00Z"));
+
+            timeBasedCheckout.addItem("apples", 6);
+            timeBasedCheckout.addItem("milk");
+
+            assertThat(timeBasedCheckout.getTotalCost()).isEqualTo(184);
         }
     }
 }
