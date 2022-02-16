@@ -8,7 +8,7 @@ import uk.co.redribbondevelopment.checkout.stock_item.StockItemService;
 import java.util.Collection;
 import java.util.Objects;
 
-public final class Checkout {
+public final class CheckoutOrchestrator {
     private final StockItemService stockItemService;
     private final PromotionService promotionService;
 
@@ -16,7 +16,7 @@ public final class Checkout {
     private Collection<Promotion> applicablePromotions;
 
 
-    public Checkout(StockItemService stockItemService, PromotionService promotionService) {
+    public CheckoutOrchestrator(StockItemService stockItemService, PromotionService promotionService) {
         this.stockItemService = stockItemService;
         this.promotionService = promotionService;
     }

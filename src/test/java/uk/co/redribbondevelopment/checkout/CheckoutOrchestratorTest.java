@@ -21,9 +21,9 @@ import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class CheckoutProcessTest {
+class CheckoutOrchestratorTest {
 
-    private final Checkout checkout = new Checkout(new InMemoryStockItemService(), mock(PromotionService.class));
+    private final CheckoutOrchestrator checkoutOrchestrator = new CheckoutOrchestrator(new InMemoryStockItemService(), mock(PromotionService.class));
 
     @Nested
     @DisplayName("Single stock item basket")
@@ -32,9 +32,9 @@ class CheckoutProcessTest {
         @ParameterizedTest
         @MethodSource("itemNameAndCostProvider")
         void addSingleItemToTheBasket(String itemName, int expectedItemCost) {
-            checkout.addItem(itemName);
+            checkoutOrchestrator.addItem(itemName);
 
-            assertThat(checkout.getTotalCost()).isEqualTo(expectedItemCost);
+            assertThat(checkoutOrchestrator.getTotalCost()).isEqualTo(expectedItemCost);
         }
 
         static Stream<Arguments> itemNameAndCostProvider() {
@@ -49,7 +49,7 @@ class CheckoutProcessTest {
         @Test
         void throwsExceptionWhenItemNameIsNull() {
             NullPointerException caughtException = catchThrowableOfType(
-                    () -> checkout.addItem(null), NullPointerException.class);
+                    () -> checkoutOrchestrator.addItem(null), NullPointerException.class);
 
             assertThat(caughtException).hasMessage("itemName cannot be null");
         }
@@ -57,7 +57,7 @@ class CheckoutProcessTest {
         @Test
         void throwsExceptionWhenItemNameIsEmpty() {
             ItemNotFoundException caughtException = catchThrowableOfType(
-                    () -> checkout.addItem(""), ItemNotFoundException.class);
+                    () -> checkoutOrchestrator.addItem(""), ItemNotFoundException.class);
 
             assertThat(caughtException).hasMessage("Item '' not found");
         }
@@ -65,7 +65,7 @@ class CheckoutProcessTest {
         @Test
         void throwsExceptionWhenItemNameDoesNotExist() {
             ItemNotFoundException caughtException = catchThrowableOfType(
-                    () -> checkout.addItem("foobar"), ItemNotFoundException.class);
+                    () -> checkoutOrchestrator.addItem("foobar"), ItemNotFoundException.class);
 
             assertThat(caughtException).hasMessage("Item 'foobar' not found");
         }
@@ -76,19 +76,19 @@ class CheckoutProcessTest {
 
         @Test
         void addTwoApplesToTheBasket() {
-            checkout.addItem("apples");
-            checkout.addItem("apples");
+            checkoutOrchestrator.addItem("apples");
+            checkoutOrchestrator.addItem("apples");
 
-            assertThat(checkout.getTotalCost()).isEqualTo(20);
+            assertThat(checkoutOrchestrator.getTotalCost()).isEqualTo(20);
         }
 
         @Test
         void addThreeApplesToTheBasket() {
-            checkout.addItem("apples");
-            checkout.addItem("apples");
-            checkout.addItem("apples");
+            checkoutOrchestrator.addItem("apples");
+            checkoutOrchestrator.addItem("apples");
+            checkoutOrchestrator.addItem("apples");
 
-            assertThat(checkout.getTotalCost()).isEqualTo(30);
+            assertThat(checkoutOrchestrator.getTotalCost()).isEqualTo(30);
         }
     }
 
@@ -97,23 +97,23 @@ class CheckoutProcessTest {
 
         @Test
         void multipleStockItems() {
-            checkout.addItem("soup");
-            checkout.addItem("bread");
-            checkout.addItem("apples");
-            checkout.addItem("bread");
-            checkout.addItem("soup");
-            checkout.addItem("bread");
+            checkoutOrchestrator.addItem("soup");
+            checkoutOrchestrator.addItem("bread");
+            checkoutOrchestrator.addItem("apples");
+            checkoutOrchestrator.addItem("bread");
+            checkoutOrchestrator.addItem("soup");
+            checkoutOrchestrator.addItem("bread");
 
-            assertThat(checkout.getTotalCost()).isEqualTo(380);
+            assertThat(checkoutOrchestrator.getTotalCost()).isEqualTo(380);
         }
 
         @Test
         void multipleStockItemsV2() {
-            checkout.addItem("soup", 2);
-            checkout.addItem("bread", 3);
-            checkout.addItem("apples");
+            checkoutOrchestrator.addItem("soup", 2);
+            checkoutOrchestrator.addItem("bread", 3);
+            checkoutOrchestrator.addItem("apples");
 
-            assertThat(checkout.getTotalCost()).isEqualTo(380);
+            assertThat(checkoutOrchestrator.getTotalCost()).isEqualTo(380);
         }
     }
 
@@ -127,14 +127,14 @@ class CheckoutProcessTest {
             given(mockedClock.instant()).willReturn(Instant.parse("2022-02-15T00:00:00Z"));
 
             StockItemService stockItemService = new InMemoryStockItemService();
-            Checkout timeBasedCheckout = new Checkout(stockItemService, new InMemoryPromotionService(stockItemService, mockedClock));
+            CheckoutOrchestrator timeBasedCheckoutOrchestrator = new CheckoutOrchestrator(stockItemService, new InMemoryPromotionService(stockItemService, mockedClock));
 
             given(mockedClock.instant()).willReturn(Instant.parse("2022-02-20T00:00:00Z"));
 
-            timeBasedCheckout.addItem("apples", 6);
-            timeBasedCheckout.addItem("milk");
+            timeBasedCheckoutOrchestrator.addItem("apples", 6);
+            timeBasedCheckoutOrchestrator.addItem("milk");
 
-            assertThat(timeBasedCheckout.getTotalCost()).isEqualTo(184);
+            assertThat(timeBasedCheckoutOrchestrator.getTotalCost()).isEqualTo(184);
         }
     }
 }
