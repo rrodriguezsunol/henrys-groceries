@@ -28,8 +28,7 @@ public class InMemoryPromotionRuleService implements PromotionRuleService {
     public Collection<PromotionRule> findActiveToday() {
         var today = LocalDate.now(clock);
 
-        if ((today.isEqual(promotionRule.getValidFrom()) || today.isAfter(promotionRule.getValidFrom()))
-                && (today.isEqual(promotionRule.getValidTo()) || today.isBefore(promotionRule.getValidTo()))) {
+        if (promotionRule.isActiveOn(today)) {
             return List.of(promotionRule);
         }
 

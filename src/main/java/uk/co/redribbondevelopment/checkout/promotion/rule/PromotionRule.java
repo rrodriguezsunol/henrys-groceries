@@ -21,12 +21,9 @@ public final class PromotionRule {
         this.discountPercentage = discountPercentage;
     }
 
-    public LocalDate getValidFrom() {
-        return validFrom;
-    }
-
-    public LocalDate getValidTo() {
-        return validTo;
+    public boolean isActiveOn(LocalDate today) {
+        return (today.isEqual(validFrom) || today.isAfter(validFrom))
+                && (today.isEqual(validTo) || today.isBefore(validTo));
     }
 
     public int calculateDiscountAmount(int quantity) {
