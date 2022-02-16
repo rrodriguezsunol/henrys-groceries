@@ -1,5 +1,6 @@
 package uk.co.redribbondevelopment.checkout;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import uk.co.redribbondevelopment.checkout.promotion.InMemoryPromotionsEngine;
-import uk.co.redribbondevelopment.checkout.promotion.PromotionsEngine;
 import uk.co.redribbondevelopment.checkout.promotion.rule.InMemoryPromotionRuleService;
 import uk.co.redribbondevelopment.checkout.stock_item.InMemoryStockItemService;
 import uk.co.redribbondevelopment.checkout.stock_item.ItemNotFoundException;
@@ -22,9 +22,22 @@ import static org.assertj.core.api.Assertions.catchThrowableOfType;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class CheckoutOrchestratorTest {
+class CheckoutOrchestratorMultiLayerTest {
 
-    private final CheckoutOrchestrator checkoutOrchestrator = new CheckoutOrchestrator(new InMemoryStockItemService(), mock(PromotionsEngine.class));
+    private CheckoutOrchestrator checkoutOrchestrator;
+
+    private final Clock mockedClock = mock(Clock.class);
+
+    @BeforeEach
+    void setUpTestSubject() {
+        given(mockedClock.getZone()).willReturn(Clock.systemDefaultZone().getZone());
+        given(mockedClock.instant()).willReturn(Instant.now());
+
+        StockItemService stockItemService = new InMemoryStockItemService();
+        checkoutOrchestrator = new CheckoutOrchestrator(
+                stockItemService,
+                new InMemoryPromotionsEngine(new InMemoryPromotionRuleService(stockItemService, mockedClock)));
+    }
 
     @Nested
     @DisplayName("Single stock item basket")
@@ -120,10 +133,28 @@ class CheckoutOrchestratorTest {
 
     @Nested
     class ApplesDiscountTest {
-        Clock mockedClock = mock(Clock.class);
 
         @Test
-        void applesDiscount() {
+        void sixApplesBoughtAndOneBottleOfMilkBoughtToday() {
+            given(mockedClock.getZone()).willReturn(Clock.systemDefaultZone().getZone());
+            given(mockedClock.instant()).willReturn(Instant.parse("2022-02-15T00:00:00Z"));
+
+            StockItemService stockItemService = new InMemoryStockItemService();
+            CheckoutOrchestrator timeBasedCheckoutOrchestrator = new CheckoutOrchestrator(
+                    stockItemService,
+                    new InMemoryPromotionsEngine(
+                            new InMemoryPromotionRuleService(stockItemService, mockedClock)));
+
+            given(mockedClock.instant()).willReturn(Instant.parse("2022-02-15T00:00:00Z"));
+
+            timeBasedCheckoutOrchestrator.addItem("apples", 6);
+            timeBasedCheckoutOrchestrator.addItem("milk");
+
+            assertThat(timeBasedCheckoutOrchestrator.getTotalCost()).isEqualTo(190);
+        }
+
+        @Test
+        void sixApplesAndOneBottleOfMilkBoughtInFiveDays() {
             given(mockedClock.getZone()).willReturn(Clock.systemDefaultZone().getZone());
             given(mockedClock.instant()).willReturn(Instant.parse("2022-02-15T00:00:00Z"));
 
